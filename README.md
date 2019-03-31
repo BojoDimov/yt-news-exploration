@@ -14,3 +14,8 @@ The main purpose of this project is to develop a scalable architecture for extra
 2. Docker container with NodeJS for the scraping.
 3. Docker container with Python for the classification of data.
 4. Docker container with JupyterNotebook for data exploration.
+
+### Technologies
+1. NodeJS
+2. Db - OrientDb (mostly using the graph store)
+3. OrientJS - OrientDB driver for NodeJS
