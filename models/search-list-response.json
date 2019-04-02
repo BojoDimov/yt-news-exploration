@@ -1,0 +1,14 @@
+{
+  "kind": "youtube#searchListResponse",
+  "etag": "etag",
+  "nextPageToken": "string",
+  "prevPageToken": "string",
+  "regionCode": "string",
+  "pageInfo": {
+    "totalResults": "integer",
+    "resultsPerPage": "integer"
+  },
+  "items": [
+    "searchListItem"
+  ]
+}

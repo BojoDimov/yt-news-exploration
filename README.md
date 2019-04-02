@@ -19,3 +19,9 @@ The main purpose of this project is to develop a scalable architecture for extra
 1. NodeJS
 2. Db - OrientDb (mostly using the graph store)
 3. OrientJS - OrientDB driver for NodeJS
+
+### Queries
+Retrieve list of news channels
+```
+GET https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=news&type=channel&key={YOUR_API_KEY}
+```
