@@ -49,7 +49,7 @@ await gapiRequest('youtube/v3/search', {
 
 Retrieve list of comments that belong to `videoId`
 ```javascript
-gapiRequest('youtube/v3/commentThreads', {
+await gapiRequest('youtube/v3/commentThreads', {
     part: 'snippet',
     videoId: videoId,
     maxResults: 5
