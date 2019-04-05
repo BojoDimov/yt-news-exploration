@@ -21,7 +21,37 @@ The main purpose of this project is to develop a scalable architecture for extra
 3. OrientJS - OrientDB driver for NodeJS
 
 ### Queries
-Retrieve list of news channels
+I have made some abstractions over the google rest api. The following function is used to query the api using api key.
+
+```javascript
+function gapiRequest(api, params);
 ```
-GET https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=news&type=channel&key={YOUR_API_KEY}
+
+Retrieve list of news channels
+```javascript
+await gapiRequest('youtube/v3/search', {
+    part: 'snippet',
+    maxResults: 5,
+    q: searchTerm,
+    type: 'channel'
+  });
+```
+
+Retrieve list of videos that belong to `channelId`
+```javascript
+await gapiRequest('youtube/v3/search', {
+    part: 'snippet',
+    channelId: channelId,
+    maxResults: 5,
+    type: 'videos'
+  });
+```
+
+Retrieve list of comments that belong to `videoId`
+```javascript
+gapiRequest('youtube/v3/commentThreads', {
+    part: 'snippet',
+    videoId: videoId,
+    maxResults: 5
+  });
 ```
