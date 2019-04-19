@@ -93,6 +93,7 @@ async function initVideoClass(db) {
       { name: 'title', type: 'String' },
       { name: 'description', type: 'String' },
       { name: 'thumbnail', type: 'String' },
+      { name: 'tag', type: 'String' },
       { name: 'publishedAt', type: 'DateTime' }
     ]);
     console.log('YoutubeVideo properties created successfully.');
