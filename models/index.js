@@ -1,3 +1,4 @@
+const moment = require('moment');
 const timestampFormat = process.env.TIMESTAMP_FORMAT;
 
 function Channel(item) {
@@ -9,12 +10,12 @@ function Channel(item) {
   };
 }
 
-function Video(item, tag) {
+function Video(item) {
   return {
     videoId: item.id.videoId,
     title: item.snippet.title,
     description: item.snippet.description,
-    tag: tag,
+    tag: "",
     publishedAt: moment(item.snippet.publishedAt).format(timestampFormat),
     thumbnail: item.snippet.thumbnails.default.url
   };

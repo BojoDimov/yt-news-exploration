@@ -24,6 +24,7 @@ async function insertVideo(video) {
       .set({
         videoId: video.videoId,
         title: video.title,
+        tag: "review",
         description: video.description,
         publishedAt: video.publishedAt,
         thumbnail: video.thumbnail
