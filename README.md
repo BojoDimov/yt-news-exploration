@@ -78,4 +78,11 @@ If you want to map volumes from host to container filesystem you can use the -v 
 ```Bash
 -v "<host-full-path>/config":"/orientdb/config"
 ```
--v "C:\Projects2\yt-news-exploration\database\odb1\config":"/orientdb/config"
+
+##### Whats next?
+1. `docker-compose` of all the nodes
+2. `kubernetes` vs `docker swarm` orchestration in order to deploy to the cloud
+3. custom `hazelcast.xml` configuration for each cloud provider
+
+#### Architecture diagram
+![not found ](Big-Data-Project-Architecture.png)
