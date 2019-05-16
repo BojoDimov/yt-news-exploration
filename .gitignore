@@ -1,2 +1,4 @@
 node_modules/
 .env
+database/odb1
+database/odb2

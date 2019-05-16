@@ -55,3 +55,27 @@ await gapiRequest('youtube/v3/commentThreads', {
     maxResults: 5
   });
 ```
+
+## Distributed OrientDB
+Orientdb uses master-less scheme for distributed architecture. That means every node is master. There is option to create node only for replication, but thats more advanced use-case. Distribution is based on Hazelcast project which provides auto-discovery of nodes and synchonization of configurations. There are 3 main files that take part in the configuration of distributed nodes:
+  1. orientdb-server-config.xml - used to define basic information for the node and to enable speciffic plugins
+  2. default-distributed-db-config.json - used to set parameters like auto deploy and default configurations for new nodes in the cluster
+  3. hazelcast.xml - used to define auto-discovery protocols and network topology
+
+Note that the default configurations work perfectly for local testing with docker. I created local bridge network called `big-data-network` in which ports between containers are opened. After that run containers in that network and give them different port mappings and names. Command for runnig odb container:
+```Bash
+docker run -d \ 
+--name <container-name> \ 
+--network big-data-network \ 
+-p <host-port-binary>:2424 \ 
+-p <host-port-odb-studio>:2480 \ 
+-e ORIENTDB_ROOT_PASSWORD=<some-password> \ 
+-e ORIENTDB_NODE_NAME=<container-name> \ 
+orientdb /orientdb/bin/server.sh -Ddistributed=true
+```
+
+If you want to map volumes from host to container filesystem you can use the -v parameter like this
+```Bash
+-v "<host-full-path>/config":"/orientdb/config"
+```
+-v "C:\Projects2\yt-news-exploration\database\odb1\config":"/orientdb/config"
