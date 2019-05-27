@@ -56,6 +56,9 @@ await gapiRequest('youtube/v3/commentThreads', {
   });
 ```
 
+#### Architecture diagram
+![not found ](Big-Data-Project-Architecture.png)
+
 ## Distributed OrientDB
 Orientdb uses master-less scheme for distributed architecture. That means every node is master. There is option to create node only for replication, but thats more advanced use-case. Distribution is based on Hazelcast project which provides auto-discovery of nodes and synchonization of configurations. There are 3 main files that take part in the configuration of distributed nodes:
   1. orientdb-server-config.xml - used to define basic information for the node and to enable speciffic plugins
@@ -79,10 +82,26 @@ If you want to map volumes from host to container filesystem you can use the -v 
 -v "<host-full-path>/config":"/orientdb/config"
 ```
 
+#### Results after running 4 containers with the above command:
+![Hazelcast initial cluster table](assets/initial_odb1_distributed.png)
+
+After this, to copy-paste backup of database to one of the servers in the cluster using 
+```BASH
+docker cp "C:\\BACKUP\orientdb\youtube-db" odb1:"orientdb\databases"
+``` 
+Distributation software will then replicate the database to every node in the cluster which results in the following table.
+
+![replication](assets/replication.png)
+<i>Note how on `odb4` database is not yet replicated.</i>
+
+### Topology of the graph
+![graph](assets/graph.png)
+
+### Graph distribution
+Each class is spanned across multiple clusters which can be on different servers. 
+
 ##### Whats next?
 1. `docker-compose` of all the nodes
 2. `kubernetes` vs `docker swarm` orchestration in order to deploy to the cloud
 3. custom `hazelcast.xml` configuration for each cloud provider
-
-#### Architecture diagram
-![not found ](Big-Data-Project-Architecture.png)
+ 
