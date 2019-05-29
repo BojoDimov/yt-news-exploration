@@ -97,11 +97,30 @@ Distributation software will then replicate the database to every node in the cl
 ### Topology of the graph
 ![graph](assets/graph.png)
 
+Example query for collecting the statistics of videos
+```javascript
+MATCH 
+{Class: YoutubeVideo, as: video}
+-HasComment-
+{Class: YoutubeComment, as: comment}
+-HasSentiment-
+{Class: VaderSentiment, as: sentiment}
+return video.@rid as videoRid, video.tag as tag, comment.textOriginal as text, comment.likeCount as likes, sentiment.compound as sentiment
+```
+
 ### Graph distribution
 Each class is spanned across multiple clusters which can be on different servers. 
+![sharding](assets/sharding.png)
+
+
+![sharding 2](assets/sharding2.jpg)
+
+Orientdb uses Apache Spark (Pregel) for querying `sharded` classes. In short, the process of traversing the graph is split in `iterations` which consists of computing the state of objects called `triplets = 2 vertices connected by edge`. Triplets are `mapped` to resulting objects and then `reduced` combining the results from the different nodes, and this is repeated for every next step of traversion. There are some algorithms for `vertex-splitting` which can help one to model the sharding of data, maximazing its `locality`. 
+
+[The paper can be found here](https://stanford.edu/~rezab/classes/cme323/S15/notes/lec8.pdf)
 
 ##### Whats next?
 1. `docker-compose` of all the nodes
 2. `kubernetes` vs `docker swarm` orchestration in order to deploy to the cloud
 3. custom `hazelcast.xml` configuration for each cloud provider
- 
+4. sharding of data, replicating some clusters only on part of the nodes (servers)
