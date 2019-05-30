@@ -86,3 +86,6 @@ If you want to map volumes from host to container filesystem you can use the -v 
 
 #### Architecture diagram
 ![not found ](Big-Data-Project-Architecture.png)
+
+### Partitioning vs Sharding
+<b>`Partitioning`</b> is refered as `vertical scaling` which means that different attributes from one object can be stored at different places. On the other hand, <b>`Sharding`</b> means that the whole object is stored at one place, but there are multiple places where we can store objects. This is refered as `horizontal scaling`. Orientdb supports sharding of classes, because each class can span accross multiple clusters possibly on different servers. There is configuration file that maps clusters to servers.
