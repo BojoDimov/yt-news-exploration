@@ -56,6 +56,9 @@ await gapiRequest('youtube/v3/commentThreads', {
   });
 ```
 
+#### Architecture diagram
+![not found ](Big-Data-Project-Architecture.png)
+
 ## Distributed OrientDB
 Orientdb uses master-less scheme for distributed architecture. That means every node is master. There is option to create node only for replication, but thats more advanced use-case. Distribution is based on Hazelcast project which provides auto-discovery of nodes and synchonization of configurations. There are 3 main files that take part in the configuration of distributed nodes:
   1. orientdb-server-config.xml - used to define basic information for the node and to enable speciffic plugins
@@ -79,6 +82,43 @@ If you want to map volumes from host to container filesystem you can use the -v 
 -v "<host-full-path>/config":"/orientdb/config"
 ```
 
+#### Results after running 4 containers with the above command:
+![Hazelcast initial cluster table](assets/initial_odb1_distributed.png)
+
+After this, to copy-paste backup of database to one of the servers in the cluster using 
+```BASH
+docker cp "C:\\BACKUP\orientdb\youtube-db" odb1:"orientdb\databases"
+``` 
+Distributation software will then replicate the database to every node in the cluster which results in the following table.
+
+![replication](assets/replication.png)
+<i>Note how on `odb4` database is not yet replicated.</i>
+
+### Topology of the graph
+![graph](assets/graph.png)
+
+Example query for collecting the statistics of videos
+```javascript
+MATCH 
+{Class: YoutubeVideo, as: video}
+-HasComment-
+{Class: YoutubeComment, as: comment}
+-HasSentiment-
+{Class: VaderSentiment, as: sentiment}
+return video.@rid as videoRid, video.tag as tag, comment.textOriginal as text, comment.likeCount as likes, sentiment.compound as sentiment
+```
+
+### Graph distribution
+Each class is spanned across multiple clusters which can be on different servers. 
+![sharding](assets/sharding.png)
+
+
+![sharding 2](assets/sharding2.jpg)
+
+Orientdb uses Apache Spark (Pregel) for querying `sharded` classes. In short, the process of traversing the graph is split in `iterations` which consists of computing the state of objects called `triplets = 2 vertices connected by edge`. Triplets are `mapped` to resulting objects and then `reduced` combining the results from the different nodes, and this is repeated for every next step of traversion. There are some algorithms for `vertex-splitting` which can help one to model the sharding of data, maximazing its `locality`. 
+
+[The paper can be found here](https://stanford.edu/~rezab/classes/cme323/S15/notes/lec8.pdf)
+
 ##### Whats next?
 1. `docker-compose` of all the nodes
 2. `kubernetes` vs `docker swarm` orchestration in order to deploy to the cloud
@@ -89,3 +129,4 @@ If you want to map volumes from host to container filesystem you can use the -v 
 
 ### Partitioning vs Sharding
 <b>`Partitioning`</b> is refered as `vertical scaling` which means that different attributes from one object can be stored at different places. On the other hand, <b>`Sharding`</b> means that the whole object is stored at one place, but there are multiple places where we can store objects. This is refered as `horizontal scaling`. Orientdb supports sharding of classes, because each class can span accross multiple clusters possibly on different servers. There is configuration file that maps clusters to servers.
+4. sharding of data, replicating some clusters only on part of the nodes (servers)
