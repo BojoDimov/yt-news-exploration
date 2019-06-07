@@ -92,7 +92,6 @@ docker cp "C:\\BACKUP\orientdb\youtube-db" odb1:"orientdb\databases"
 Distributation software will then replicate the database to every node in the cluster which results in the following table.
 
 ![replication](assets/replication.png)
-<i>Note how on `odb4` database is not yet replicated.</i>
 
 ### Topology of the graph
 ![graph](assets/graph.png)
@@ -112,6 +111,9 @@ return video.@rid as videoRid, video.tag as tag, comment.textOriginal as text, c
 Each class is spanned across multiple clusters which can be on different servers. 
 ![sharding](assets/sharding.png)
 
+### Partitioning vs Sharding
+<b>`Partitioning`</b> is refered as `vertical scaling` which means that different attributes from one object can be stored at different places. On the other hand, <b>`Sharding`</b> means that the whole object is stored at one place, but there are multiple places where we can store objects. This is refered as `horizontal scaling`. Orientdb supports sharding of classes, because each class can span accross multiple clusters possibly on different servers. There is configuration file that maps clusters to servers.
+4. sharding of data, replicating some clusters only on part of the nodes (servers)
 
 ![sharding 2](assets/sharding2.jpg)
 
@@ -123,10 +125,3 @@ Orientdb uses Apache Spark (Pregel) for querying `sharded` classes. In short, th
 1. `docker-compose` of all the nodes
 2. `kubernetes` vs `docker swarm` orchestration in order to deploy to the cloud
 3. custom `hazelcast.xml` configuration for each cloud provider
-
-#### Architecture diagram
-![not found ](Big-Data-Project-Architecture.png)
-
-### Partitioning vs Sharding
-<b>`Partitioning`</b> is refered as `vertical scaling` which means that different attributes from one object can be stored at different places. On the other hand, <b>`Sharding`</b> means that the whole object is stored at one place, but there are multiple places where we can store objects. This is refered as `horizontal scaling`. Orientdb supports sharding of classes, because each class can span accross multiple clusters possibly on different servers. There is configuration file that maps clusters to servers.
-4. sharding of data, replicating some clusters only on part of the nodes (servers)
